@@ -18,7 +18,6 @@
 
 package de.badaix.snapcast;
 
-import static android.os.PowerManager.FULL_WAKE_LOCK;
 import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
 
 import android.app.Notification;
@@ -26,11 +25,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
@@ -281,14 +278,7 @@ public class SnapclientService extends Service {
 
             PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
 
-            UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
-            if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
-                Log.d(TAG, "Running on a TV Device");
-                wakeLock = powerManager.newWakeLock(FULL_WAKE_LOCK, "snapcast:SnapcastFullWakeLock");
-            } else {
-                Log.d(TAG, "Running on a non-TV Device");
-                wakeLock = powerManager.newWakeLock(PARTIAL_WAKE_LOCK, "snapcast:SnapcastPartialWakeLock");
-            }
+            wakeLock = powerManager.newWakeLock(PARTIAL_WAKE_LOCK, "snapcast:SnapcastPartialWakeLock");
 
             wakeLock.acquire();
 
